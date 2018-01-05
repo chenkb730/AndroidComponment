@@ -1,11 +1,12 @@
 package com.android.component.base
 
-import android.app.Activity
 import android.app.Application
+import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
-import android.os.Bundle
-import android.util.Log
+import com.android.component.lifecircle.AppLifecycleObserver
+import com.android.component.lifecircle.DaggerAppComponent
 import com.hazz.kotlinmvp.utils.DisplayManager
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 
@@ -16,54 +17,23 @@ import kotlin.properties.Delegates
 
 class BaseApplication : Application() {
 
+    @Inject
+    lateinit var appLifecycleObserver: AppLifecycleObserver
+
     companion object {
 
         private val TAG = "BaseApplication"
 
         var context: Context by Delegates.notNull()
             private set
-
-
     }
 
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
         DisplayManager.init(this)
-        registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks)
 
-
+        DaggerAppComponent.builder().application(this).build().inject(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(appLifecycleObserver)
     }
-
-    private val mActivityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            Log.d(TAG, "onCreated: " + activity.componentName.className)
-        }
-
-        override fun onActivityStarted(activity: Activity) {
-            Log.d(TAG, "onStart: " + activity.componentName.className)
-        }
-
-        override fun onActivityResumed(activity: Activity) {
-
-        }
-
-        override fun onActivityPaused(activity: Activity) {
-
-        }
-
-        override fun onActivityStopped(activity: Activity) {
-
-        }
-
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-
-        }
-
-        override fun onActivityDestroyed(activity: Activity) {
-            Log.d(TAG, "onDestroy: " + activity.componentName.className)
-        }
-    }
-
-
 }

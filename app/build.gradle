@@ -31,6 +31,19 @@ dependencies {
     implementation rootProject.ext.rxJavaLibs
     //network
     implementation rootProject.ext.networkLibs
+
+    // Lifecycle
+    implementation "android.arch.lifecycle:extensions:$rootProject.ext.dependVersion.archLifecycleVersion"
+    kapt "android.arch.lifecycle:compiler:$rootProject.ext.dependVersion.archLifecycleVersion"
+
+    // Dagger Core
+    compileOnly "com.google.dagger:dagger:$rootProject.ext.dependVersion.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dependVersion.daggerVersion"
+
+    // Dagger Android
+    implementation "com.google.dagger:dagger-android:$rootProject.ext.dependVersion.daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.ext.dependVersion.daggerVersion"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
