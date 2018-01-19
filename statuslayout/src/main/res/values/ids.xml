@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="status_view_empty_layout" type="id" />
+    <item name="status_view_loading_layout" type="id" />
+    <item name="status_view_content_layout" type="id" />
+    <item name="status_view_error_layout" type="id" />
+    <item name="status_view_error_image" type="id" />
+    <item name="status_view_error_click_view" type="id" />
+    <item name="status_view_error_text" type="id" />
+    <item name="status_view_empty_image" type="id" />
+    <item name="status_view_empty_text" type="id" />
+    <item name="status_view_empty_click_view" type="id" />
+    <item name="status_view_loading_text" type="id" />
+</resources>

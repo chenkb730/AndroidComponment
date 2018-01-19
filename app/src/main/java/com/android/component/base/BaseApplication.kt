@@ -4,7 +4,6 @@ import android.app.Application
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
 import com.android.component.lifecircle.AppLifecycleObserver
-import com.android.component.lifecircle.DaggerAppComponent
 import com.hazz.kotlinmvp.utils.DisplayManager
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -33,7 +32,7 @@ class BaseApplication : Application() {
         context = applicationContext
         DisplayManager.init(this)
 
-        DaggerAppComponent.builder().application(this).build().inject(this)
+//        DaggerAppComponent.builder().application(this).build().inject(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(appLifecycleObserver)
     }
 }
