@@ -13,6 +13,12 @@
 缺省页面框架,用于处理缺省页面使用
 
 
+# shareLib
+
+常用的分享工具类库
+
+需要添加 maven { url "https://dl.bintray.com/thelasterstar/maven/" }
+
 
 # arch
 
@@ -21,4 +27,6 @@ Android viewmodel实例
 # apptools
 
 整理常用的工具类
+
+
 

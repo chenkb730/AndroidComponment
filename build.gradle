@@ -24,6 +24,7 @@ allprojects {
         jcenter()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url 'https://raw.githubusercontent.com/chenkb730/mvn-repo/master' }
+        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
     }
 }
 
