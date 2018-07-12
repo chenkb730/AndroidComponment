@@ -14,7 +14,7 @@
 
 
 
-#arch
+# arch
 
 Android viewmodel实例
 
