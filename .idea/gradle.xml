@@ -3,12 +3,12 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="LOCAL" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="F:/dev_tools/AndroidStudio 3.0/android-studio/gradle/gradle-4.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/androidRoute" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/apptools" />
             <option value="$PROJECT_DIR$/arch" />

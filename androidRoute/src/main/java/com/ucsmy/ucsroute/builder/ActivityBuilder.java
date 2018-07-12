@@ -1,10 +1,11 @@
-package com.ucsmy.ucsroute;
+package com.ucsmy.ucsroute.builder;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.ucsmy.ucsroute.UcsRoute;
 import com.ucsmy.ucsroute.helper.UcsRouteHelper;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ import java.util.Set;
  * 构建跳转的builder
  * Created by Seven on 2018/7/12.
  */
-public class ActivityBuilder extends UcsRoute.Builder {
+public final class ActivityBuilder extends UcsRoute.Builder {
 
     public ActivityBuilder(Context mContext) {
         super(mContext);
