@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadFactory
 /**
  * Created by Seven on 2018/3/1.
  */
-class PriorityThreadFactory constructor(val priority: Int) : ThreadFactory {
+class PriorityThreadFactory constructor(private val priority: Int) : ThreadFactory {
 
 
     override fun newThread(runnable: Runnable?): Thread {

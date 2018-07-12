@@ -48,25 +48,25 @@ internal class Decimal constructor(initValue: Any,
     /**
      * 获取该数被除后的整数
      *
-     * @param object
+     * @param obj
      * 因数
      *
      * @return 结果
      */
-    fun getDivGetInteger(`object`: Any): Decimal {
-        return Decimal(this.bigDecimal!!.divideToIntegralValue(Decimal(`object`).bigDecimal, mathContext))
+    fun getDivGetInteger(obj: Any): Decimal {
+        return Decimal(this.bigDecimal!!.divideToIntegralValue(Decimal(obj).bigDecimal, mathContext))
     }
 
     /**
      * 求余
      *
-     * @param object
+     * @param obj
      * 因数
      *
      * @return 结果
      */
-    fun getRemainder(`object`: Any): Decimal {
-        return Decimal(this.bigDecimal!!.remainder(Decimal(`object`).bigDecimal, mathContext))
+    fun getRemainder(obj: Any): Decimal {
+        return Decimal(this.bigDecimal!!.remainder(Decimal(obj).bigDecimal, mathContext))
     }
     //endregion
 
@@ -79,8 +79,8 @@ internal class Decimal constructor(initValue: Any,
      *
      * @return
      */
-    fun add(`object`: Any): Decimal {
-        this.bigDecimal = this.bigDecimal!!.add(Decimal(`object`).bigDecimal, mathContext)
+    fun add(obj: Any): Decimal {
+        this.bigDecimal = this.bigDecimal!!.add(Decimal(obj).bigDecimal, mathContext)
         return this
     }
 
@@ -91,32 +91,32 @@ internal class Decimal constructor(initValue: Any,
      *
      * @return
      */
-    fun sub(`object`: Any): Decimal {
-        this.bigDecimal = this.bigDecimal!!.subtract(Decimal(`object`).bigDecimal, mathContext)
+    fun sub(obj: Any): Decimal {
+        this.bigDecimal = this.bigDecimal!!.subtract(Decimal(obj).bigDecimal, mathContext)
         return this
     }
 
     /**
      * 乘法
      *
-     * @param object
+     * @param obj
      *
      * @return
      */
-    fun mul(`object`: Any): Decimal {
-        this.bigDecimal = this.bigDecimal!!.multiply(Decimal(`object`).bigDecimal, mathContext)
+    fun mul(obj: Any): Decimal {
+        this.bigDecimal = this.bigDecimal!!.multiply(Decimal(obj).bigDecimal, mathContext)
         return this
     }
 
     /**
      * 除法
      *
-     * @param object
+     * @param obj
      *
      * @return
      */
-    operator fun div(`object`: Any): Decimal {
-        this.bigDecimal = this.bigDecimal!!.divide(Decimal(`object`).bigDecimal, mathContext)
+    operator fun div(obj: Any): Decimal {
+        this.bigDecimal = this.bigDecimal!!.divide(Decimal(obj).bigDecimal, mathContext)
         return this
     }
 
@@ -300,8 +300,13 @@ internal class Decimal constructor(initValue: Any,
             return Decimal(initValue)
         }
 
-        //region 便利生成方式,获取实例方法
-
+        /**
+         * 便利生成方式,获取实例方法
+         *
+         * @param initValue
+         *
+         * @param mathContext
+         */
         fun instance(initValue: Any, mathContext: MathContext): Decimal {
             return Decimal(initValue, mathContext)
         }

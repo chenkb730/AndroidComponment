@@ -25,7 +25,7 @@ class ThreadTool private constructor() {
 
         val NUMBER_OF_CORE = Runtime.getRuntime().availableProcessors()
 
-        val KEEP_ALIVE_TIME = 1L
+        const val KEEP_ALIVE_TIME = 1L
 
         val KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS
     }
