@@ -42,6 +42,9 @@ ext {
             rxAndroid: "io.reactivex.rxjava2:rxandroid:$dependVersion.rxAndroid"
     ]
 
+    kotlin = [
+            kotlin_version
+    ]
 
 
 

@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'maven'
+
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
 
@@ -28,12 +30,24 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation rootProject.ext.supportLibs
+    provided rootProject.ext.supportLibs
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    provided "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
     mavenCentral()
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+
+        repository(url: "file://E:/GitHubMaven/")
+        pom.project {
+            groupId "com.seven"
+            artifactId "statusLayout"
+            version "1.0.0"
+        }
+    }
 }

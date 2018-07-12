@@ -10,7 +10,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/apptools" />
             <option value="$PROJECT_DIR$/arch" />
+            <option value="$PROJECT_DIR$/statuslayout" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

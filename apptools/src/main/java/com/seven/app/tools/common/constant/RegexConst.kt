@@ -12,7 +12,7 @@ object RegexConst {
     }
 
 
-    object {
+    object REGEXS {
         /**
          * 正则：金额
          */

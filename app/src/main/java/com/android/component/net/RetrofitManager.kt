@@ -1,5 +1,3 @@
-package com.hazz.kotlinmvp.net
-
 import android.content.Context
 import com.android.component.base.BaseApplication
 import com.android.component.net.ApiService

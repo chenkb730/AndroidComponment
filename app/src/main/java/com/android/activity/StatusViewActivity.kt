@@ -26,6 +26,8 @@ class StatusViewActivity : AppCompatActivity() {
 
         parentView = findViewById(R.id.content)
         setupStatusView()
+
+
     }
 
 
