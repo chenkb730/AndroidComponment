@@ -1,21 +1,16 @@
 apply plugin: 'com.android.library'
+
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
-apply plugin: 'maven'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
-
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        versionName "1.0.0"
     }
 
     buildTypes {
@@ -24,27 +19,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation rootProject.ext.supportLibs
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation rootProject.ext.okhttp3Libs
+    implementation rootProject.ext.networkLibs
+    implementation rootProject.ext.rxJavaLibs
 
-    compileOnly rootProject.ext.supportLibs
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
     mavenCentral()
-}
-
-uploadArchives {
-    repositories.mavenDeployer {
-
-        repository(url: "file:///Users/chenkunbin/GithubProjects/mvn-repo")
-        pom.project {
-            groupId "com.seven"
-            artifactId "statusLayout"
-            version "1.0.0"
-        }
-    }
 }

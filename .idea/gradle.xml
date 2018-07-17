@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/apptools" />
             <option value="$PROJECT_DIR$/arch" />
+            <option value="$PROJECT_DIR$/khttp" />
             <option value="$PROJECT_DIR$/sharelib" />
             <option value="$PROJECT_DIR$/statuslayout" />
           </set>

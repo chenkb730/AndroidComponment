@@ -1,22 +1,23 @@
 ext {
 
     android = [
-            compileSdkVersion: 26,
-            buildToolsVersion: "26.0.2",
-            minSdkVersion    : 14,
-            targetSdkVersion : 26,
+            compileSdkVersion: 27,
+            buildToolsVersion: "27.0.3",
+            minSdkVersion    : 15,
+            targetSdkVersion : 27,
             versionCode      : 1,
             versionName      : "1.0"
     ]
 
     dependVersion = [
-            androidSupportSdkVersion: "27.0.2",
+            androidSupportSdkVersion: "27.1.1",
             retrofitSdkVersion      : "2.3.0",
             glideSdkVersion         : "4.0.0",
             rxJava                  : "2.1.5",
             rxAndroid               : "2.0.1",
             daggerVersion           : "2.12",
-            archLifecycleVersion    : "1.0.0"
+            archLifecycleVersion    : "1.1.1",
+            okhttp3                 : "3.11.0"
     ]
 
     supportDeps = [
@@ -31,10 +32,9 @@ ext {
 
     retrofit = [
             //------ retrofit和RxJava ---------
-            retrofit                : "com.squareup.retrofit2:retrofit:$dependVersion.retrofitSdkVersion",
-            retrofitConverterGson   : "com.squareup.retrofit2:converter-gson:$dependVersion.retrofitSdkVersion",
-            retrofitAdapterRxjava2  : "com.squareup.retrofit2:adapter-rxjava2:$dependVersion.retrofitSdkVersion",
-            okhttp3LoggerInterceptor: 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+            retrofit              : "com.squareup.retrofit2:retrofit:$dependVersion.retrofitSdkVersion",
+            retrofitConverterGson : "com.squareup.retrofit2:converter-gson:$dependVersion.retrofitSdkVersion",
+            retrofitAdapterRxjava2: "com.squareup.retrofit2:adapter-rxjava2:$dependVersion.retrofitSdkVersion",
     ]
 
     rxJava = [
@@ -44,6 +44,12 @@ ext {
 
     kotlin = [
             kotlin_version
+    ]
+    okhttp3 = [
+            okhttp3                 : "com.squareup.okhttp3:okhttp:$dependVersion.okhttp3",
+            okhttp3LoggerInterceptor: "com.squareup.okhttp3:logging-interceptor:$dependVersion.okhttp3"
+
+
     ]
 
 
@@ -55,6 +61,7 @@ ext {
 
     supportLibs = supportDeps.values()
     networkLibs = retrofit.values()
+    okhttp3Libs = okhttp3.values()
     rxJavaLibs = rxJava.values()
     otherLibs = [glide]
 

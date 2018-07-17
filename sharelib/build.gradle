@@ -28,7 +28,7 @@ dependencies {
 
     implementation rootProject.ext.supportDeps.supportv4
     implementation rootProject.ext.rxJavaLibs
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation rootProject.ext.okhttp3.okhttp3
     implementation 'com.sina.weibo.sdk:core:4.2.7:openDefaultRelease@aar'
 }
 

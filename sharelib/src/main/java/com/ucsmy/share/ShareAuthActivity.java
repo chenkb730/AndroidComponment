@@ -20,7 +20,7 @@ public class ShareAuthActivity extends Activity {
 
     public static Intent newInstance(Context context, int type) {
         Intent intent = new Intent(context, ShareAuthActivity.class);
-        if (context instanceof Application) {
+        if(context instanceof Application) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         intent.putExtra(TYPE, type);
@@ -33,7 +33,7 @@ public class ShareAuthActivity extends Activity {
         isNew = true;
 
         mType = getIntent().getIntExtra(TYPE, 0);
-        if (mType == ShareUtil.TYPE) {
+        if(mType == ShareUtil.TYPE) {
             // 分享
             ShareUtil.action(this);
         } else {
@@ -46,7 +46,7 @@ public class ShareAuthActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isNew) {
+        if(isNew) {
             isNew = false;
         } else {
             finish();

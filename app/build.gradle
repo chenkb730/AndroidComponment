@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -12,7 +11,6 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -20,17 +18,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.21'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //support
     implementation rootProject.ext.supportLibs
     // RxJava2
     implementation rootProject.ext.rxJavaLibs
     //network
     implementation rootProject.ext.networkLibs
+    //okhttp3
+    implementation rootProject.ext.okhttp3Libs
 
     // Lifecycle
     implementation "android.arch.lifecycle:extensions:$rootProject.ext.dependVersion.archLifecycleVersion"
@@ -44,11 +48,6 @@ dependencies {
     implementation 'com.google.dagger:dagger-android:2.14.1'
     kapt "com.google.dagger:dagger-android-processor:$rootProject.ext.dependVersion.daggerVersion"
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-//    implementation project(':statuslayout')
 
     implementation 'com.seven:statusLayout:1.0.0@aar'
 }

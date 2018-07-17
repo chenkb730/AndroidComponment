@@ -1,1 +1,1 @@
-include ':app', ':arch', ':statuslayout', ':apptools','androidRoute','sharelib'
+include ':app', ':arch', ':statuslayout', ':apptools', ':khttp','androidRoute','sharelib'

@@ -20,6 +20,6 @@ android {
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    provided rootProject.ext.supportLibs
+    compileOnly rootProject.ext.supportLibs
     implementation 'com.squareup.okio:okio:1.14.0'
 }
