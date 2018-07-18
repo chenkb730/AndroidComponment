@@ -117,7 +117,7 @@ object KHttpUtils {
         return needTypes
     }
 
-    fun getClass(type: Type, i: Int): Class<*>? {
+    fun getClass(type: Type?, i: Int): Class<*>? {
         return when (type) {
             is ParameterizedType ->
                 getGenericClass(type, i)
@@ -126,7 +126,7 @@ object KHttpUtils {
         }
     }
 
-    fun getType(type: Type, i: Int): Type? {
+    fun getType(type: Type?, i: Int): Type? {
         return when (type) {
             is ParameterizedType ->
                 getGenericType(type, i)
@@ -135,7 +135,7 @@ object KHttpUtils {
         }
     }
 
-    fun getParameterizedType(type: Type, i: Int): Type? {
+    fun getParameterizedType(type: Type?, i: Int): Type? {
         return when (type) {
             is ParameterizedType -> type.actualTypeArguments[i]
             is TypeVariable<*> -> getType(type.bounds[0], 0)
@@ -166,7 +166,8 @@ object KHttpUtils {
     /**
      * 网络可用情况
      */
-    fun isNetworkAvailable(context: Context): Boolean {
+    fun isNetworkAvailable(context: Context?): Boolean {
+        if (null == context) return false
         val manager = context.applicationContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val info = manager.activeNetworkInfo
@@ -177,7 +178,7 @@ object KHttpUtils {
     /**
      * 普通类反射获取泛型方式，获取需要实际解析的类型
      */
-    fun <T> findNeedClass(cls: Class<T>): Type {
+    fun <T> findNeedClass(cls: Class<T>): Type? {
         val genType = cls.genericSuperclass
         val params = (genType as ParameterizedType).actualTypeArguments
         val type = params[0]

@@ -19,12 +19,14 @@ class ExceptionHandle {
         var errorCode = ErrorStatus.UNKNOWN_ERROR
         var errorMsg = "请求失败，请稍后重试"
 
-        fun handleException(e: Throwable): String {
+        fun handleException(e: Throwable): ApiException {
             e.printStackTrace()
             if (e is SocketTimeoutException) {//网络超时
                 println("网络连接异常:${e.message} ")
                 errorMsg = "网络连接异常"
                 errorCode = ErrorStatus.NETWORK_ERROR
+
+                return ApiException(e, errorCode)
             } else if (e is ConnectException) { //均视为网络错误
                 println("网络连接异常:${e.message} ")
                 errorMsg = "网络连接异常"
@@ -55,7 +57,7 @@ class ExceptionHandle {
                 errorMsg = "未知错误...."
                 errorCode = ErrorStatus.UNKNOWN_ERROR
             }
-            return errorMsg
+            return ApiException(e, errorCode)
         }
 
     }
