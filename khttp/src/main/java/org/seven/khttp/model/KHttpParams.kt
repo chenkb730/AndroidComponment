@@ -1,5 +1,6 @@
 package org.seven.khttp.model
 
+import android.text.TextUtils
 import okhttp3.MediaType
 import org.seven.khttp.callback.response.ProgressResponseCallBack
 import java.io.File
@@ -55,21 +56,18 @@ class KHttpParams constructor(key: String? = null, value: String? = null) : Seri
         urlParamsMap!![key] = value
     }
 
-    fun <T : File> put(key: String, file: T, responseCallBack: ProgressResponseCallBack) {
-        put(key, file, file.name, responseCallBack)
+    fun <T : Any> put(key: String, file: T, fileName: String?, responseCallBack: ProgressResponseCallBack) {
+        var name = fileName
+        if (TextUtils.isEmpty(name)) {
+            if (file is File) {
+                name = (file as File).name
+            }
+        }
+
+
+        put(key, file, name, guessMimeType(name!!), responseCallBack)
     }
 
-    fun <T : File> put(key: String, file: T, fileName: String, responseCallBack: ProgressResponseCallBack) {
-        put(key, file, fileName, guessMimeType(fileName), responseCallBack)
-    }
-
-    fun <T : InputStream> put(key: String, file: T, fileName: String, responseCallBack: ProgressResponseCallBack) {
-        put(key, file, fileName, guessMimeType(fileName), responseCallBack)
-    }
-
-    fun put(key: String, bytes: ByteArray, fileName: String, responseCallBack: ProgressResponseCallBack) {
-        put(key, bytes, fileName, guessMimeType(fileName), responseCallBack)
-    }
 
     fun put(key: String?, fileWrapper: FileWrapper<*>?) {
         if (key != null && fileWrapper != null) {
@@ -77,24 +75,25 @@ class KHttpParams constructor(key: String? = null, value: String? = null) : Seri
         }
     }
 
-    fun <T> put(key: String?, countent: T, fileName: String, contentType: MediaType?, responseCallBack: ProgressResponseCallBack) {
+    fun <T> put(key: String?, countent: T, fileName: String?, contentType: MediaType?, responseCallBack: ProgressResponseCallBack?) {
         if (key != null) {
             var fileWrappers: MutableList<FileWrapper<*>>? = fileParamsMap!![key]
             if (fileWrappers == null) {
                 fileWrappers = arrayListOf()
                 fileParamsMap!![key] = fileWrappers
             }
-            fileWrappers.add(FileWrapper(countent, fileName, contentType!!, responseCallBack))
+            fileWrappers.add(FileWrapper(countent, fileName!!, contentType!!, responseCallBack!!))
         }
     }
 
-    fun <T : File> putFileParams(key: String?, files: List<T>?, responseCallBack: ProgressResponseCallBack) {
+    fun <T : File> putFileParams(key: String?, files: List<T>?, responseCallBack: ProgressResponseCallBack?) {
         if (key != null && files != null && !files.isEmpty()) {
             for (file in files) {
-                put<File>(key, file, responseCallBack)
+                put<File>(key, file, "", responseCallBack!!)
             }
         }
     }
+
 
     fun putFileWrapperParams(key: String?, fileWrappers: List<FileWrapper<*>>?) {
         if (key != null && fileWrappers != null && !fileWrappers.isEmpty()) {
@@ -142,8 +141,8 @@ class KHttpParams constructor(key: String? = null, value: String? = null) : Seri
     /**
      * 文件类型的包装类
      */
-    class FileWrapper<T>(var file: T
-                         , var fileName: String, var contentType: MediaType, var responseCallBack: ProgressResponseCallBack) {
+    inner class FileWrapper<T>(var file: T?
+                               , var fileName: String?, var contentType: MediaType?, var responseCallBack: ProgressResponseCallBack?) {
         var fileSize: Long = 0
 
         init {

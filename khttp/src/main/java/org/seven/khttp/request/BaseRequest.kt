@@ -1,9 +1,10 @@
 package org.seven.khttp.request
 
 import android.content.Context
-import okhttp3.HttpUrl
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
+import android.text.TextUtils
+import io.reactivex.Observable
+import okhttp3.*
+import org.seven.khttp.KHttp
 import org.seven.khttp.api.KApiServise
 import org.seven.khttp.https.HttpsUtils
 import org.seven.khttp.interceptor.HeadInterceptor
@@ -13,6 +14,7 @@ import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.net.Proxy
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
@@ -20,20 +22,20 @@ import javax.net.ssl.HostnameVerifier
  * Created by Seven on 2018/7/17.
  */
 @Suppress("UNCHECKED_CAST")
-abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
+abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String = "") {
 
     companion object {
         const val TIMEOUT = 40L
         const val RETRYTIME = 0
     }
 
-    protected var context: Context? = null
-    private var apiService: KApiServise? = null
+    private var context: Context? = null
+    protected var apiService: KApiServise? = null
     private var okHttpClient: OkHttpClient? = null
     private var retrofit: Retrofit? = null
 
     private var baseUrl: String = ""
-    private var url: String = ""
+    var url: String = ""
     private var httpUrl: HttpUrl? = null
 
     private var readTimeOut = TIMEOUT
@@ -44,31 +46,60 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
     private var retryDelay: Int = 0
     private var retryIncreaseDelay: Int = 0
 
-    private var headers = KHttpHeaders()
-    private var params = KHttpParams()
+    protected var headers = KHttpHeaders()
+    protected var params = KHttpParams()
 
-    private var sign = false
-    private var timeStamp = false
-    private var accessToken = false
+    protected var cookies: MutableList<Cookie> = ArrayList()
 
-    private var proxy: Proxy? = null
-    private var sslParams: HttpsUtils.SSLParams? = null
-    private var hostnameVerifier: HostnameVerifier? = null
+    protected var proxy: Proxy? = null
+    protected var sslParams: HttpsUtils.SSLParams? = null
+    protected var hostnameVerifier: HostnameVerifier? = null
 
-    private var interceptors = mutableListOf<Interceptor>()
-    private var networkInterceptors = mutableListOf<Interceptor>()
+    protected var interceptors = mutableListOf<Interceptor>()
+    protected var networkInterceptors = mutableListOf<Interceptor>()
 
 
-    private var converterFactories = mutableListOf<Converter.Factory>()
-    private var callAdapterFactories = mutableListOf<CallAdapter.Factory>()
+    protected var converterFactories = mutableListOf<Converter.Factory>()
+    protected var callAdapterFactories = mutableListOf<CallAdapter.Factory>()
 
     init {
+
         this.url = url
+
+        val kHttp = KHttp.INSTANCE
+        context = kHttp.getContext()
+
+        retryCount = kHttp.retryCount
+        retryDelay = kHttp.retryDelay
+        retryIncreaseDelay = kHttp.retryIncreaseDelay
+
+        baseUrl = kHttp.baseUrl!!
+
+        if (!TextUtils.isEmpty(baseUrl)) {
+            httpUrl = HttpUrl.parse(baseUrl)
+        }
+
+        //默认添加 Accept-Language
+        val acceptLanguage = KHttpHeaders.acceptLanguage
+        if (!TextUtils.isEmpty(acceptLanguage)) {
+            headers.put(KHttpHeaders.HEAD_KEY_ACCEPT_LANGUAGE, acceptLanguage!!)
+        }
+        //默认添加 User-Agent
+        val userAgent = KHttpHeaders.userAgent
+        if (!TextUtils.isEmpty(userAgent)) {
+            headers.put(KHttpHeaders.HEAD_KEY_USER_AGENT, userAgent)
+        }
+
+        //添加通用头参数
+        headers(kHttp.httpHeaders!!)
+        //添加通用参数
+        params(kHttp.httpParams!!)
+
     }
 
     fun baseUrl(): R {
         this.baseUrl = baseUrl
-        if (!baseUrl.isEmpty()) {
+        if (!TextUtils.isEmpty(baseUrl)) {
             httpUrl = HttpUrl.parse(baseUrl)
         }
 
@@ -105,8 +136,10 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
         return this as R
     }
 
-    fun headers(headersK: KHttpHeaders): R {
-        this.headers = headersK
+    fun headers(headers: KHttpHeaders?): R {
+        if (null != headers) {
+            this.headers.put(headers)
+        }
         return this as R
     }
 
@@ -120,8 +153,10 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
         return this as R
     }
 
-    fun params(params: KHttpParams): R {
-        this.params = params
+    fun params(params: KHttpParams?): R {
+        if (null != params) {
+            this.params.put(params)
+        }
         return this as R
     }
 
@@ -135,24 +170,8 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
         return this as R
     }
 
-    fun sign(sign: Boolean): R {
-        this.sign = sign
-        return this as R
-    }
-
-    fun timeStamp(timeStamp: Boolean): R {
-        this.timeStamp = timeStamp
-        return this as R
-    }
-
-    fun accessToken(accessToken: Boolean): R {
-        this.accessToken = accessToken
-        return this as R
-    }
-
-
-    fun interceptors(interceptors: MutableList<Interceptor>): R {
-        this.interceptors = interceptors
+    fun addInterceptors(interceptor: Interceptor): R {
+        interceptors.add(interceptor)
         return this as R
     }
 
@@ -163,8 +182,8 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
         return this as R
     }
 
-    fun networkInterceptors(networkInterceptors: MutableList<Interceptor>): R {
-        this.networkInterceptors = networkInterceptors
+    fun addNetworkInterceptor(networkInterceptor: Interceptor): R {
+        networkInterceptors.add(networkInterceptor)
         return this as R
     }
 
@@ -203,8 +222,10 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
     /**
      * 根据形参创建OkHttpClient
      */
-    fun generateOkClient(): OkHttpClient.Builder {
-        val builder = OkHttpClient.Builder()
+    private fun generateOkClient(): OkHttpClient.Builder {
+
+        //默认builder
+        var builder = KHttp.INSTANCE.okHttpClientBuilder!!
 
         if (readTimeOut > 0) {
             builder.readTimeout(readTimeOut, TimeUnit.SECONDS)
@@ -246,9 +267,9 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
     }
 
 
-    fun generateRetrofit(): Retrofit.Builder? {
-        val newBuilder = Retrofit.Builder()
-        newBuilder.baseUrl(baseUrl)
+    private fun generateRetrofit(): Retrofit.Builder? {
+        val newBuilder = KHttp.INSTANCE.retrofitBuilder
+        newBuilder!!.baseUrl(baseUrl)
         if (!converterFactories.isEmpty()) {
             for (converterFactory in converterFactories) {
                 newBuilder.addConverterFactory(converterFactory)
@@ -272,4 +293,7 @@ abstract class BaseRequest<R : BaseRequest<R>> constructor(url: String) {
         apiService = retrofit!!.create(KApiServise::class.java)
         return this as R
     }
+
+
+    protected abstract fun request(): Observable<ResponseBody>?
 }

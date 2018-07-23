@@ -22,11 +22,11 @@ object HttpsUtils {
         var trustManager: X509TrustManager? = null
     }
 
-    fun getSslSocketFactory(bksFile: InputStream, password: String, certificates: Array<InputStream>): SSLParams {
+    fun getSslSocketFactory(bksFile: InputStream?, password: String?, certificates: Array<out InputStream>): SSLParams {
         val sslParams = SSLParams()
         try {
             val keyManagers = prepareKeyManager(bksFile, password)
-            val trustManagers = prepareTrustManager(*certificates)
+            val trustManagers = prepareTrustManager(*certificates!!)
             val sslContext = SSLContext.getInstance("TLS")
             val trustManager = if (trustManagers != null) {
                 MyTrustManager(chooseTrustManager(trustManagers))

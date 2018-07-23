@@ -59,8 +59,8 @@ class KHttpHeaders constructor(private val key: String? = null, private val valu
         }
     }
 
-    operator fun get(key: String): String? {
-        return headersMap!![key]
+    operator fun get(key: String?): String? {
+        return headersMap!![key!!]
     }
 
     fun remove(key: String?): String? {
@@ -72,6 +72,12 @@ class KHttpHeaders constructor(private val key: String? = null, private val valu
     fun clear() {
         headersMap!!.clear()
     }
+
+
+    fun isEmpty(): Boolean? {
+        return null == headersMap || headersMap!!.isEmpty()
+    }
+
 
     fun toJSONString(): String {
         val jsonObject = JSONObject()
